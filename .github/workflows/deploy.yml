@@ -49,6 +49,16 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Verify and Generate package-lock.json
+        run: |
+          if [ ! -s package-lock.json ]; then
+            echo "⚠️ package-lock.json está vacío o no existe. Recreando..."
+            rm -f package-lock.json
+            npm install --package-lock-only
+          else
+            echo "✅ package-lock.json válido detectado."
+          fi
+          
       # OPTIMIZACIÓN: Caché de Dependencias de Node
       - name: Cache Node Modules
         uses: actions/cache@v4
