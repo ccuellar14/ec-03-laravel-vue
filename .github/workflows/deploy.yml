@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test-and-validate:
-    name: 🧪 Run Tests & Code Quality
+    name: Run Tests & Code Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -126,22 +126,40 @@ jobs:
           # 5. Ejecutar PHPUnit inyectándole el bootstrap de dependencias
           vendor/bin/phpunit --bootstrap vendor/autoload.php tests/Feature/ExampleTest.php --colors=always
 
+  set-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.map.outputs.env_name }}
+    steps:
+      - name: Map branch to environment
+        id: map
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          elif [ "${GITHUB_REF_NAME}" = "staging" ]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          else
+            echo "Ref no Reconocido: $GITHUB_REF_NAME"
+            exit 1
+          fi
+
   build-and-deploy:
-    name: 🚀 Build Docker & Deploy to AWS
-    needs: test-and-validate
+    name: Build Docker & Deploy to AWS
+    needs: [test-and-validate, set-environment]
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      # Configuración de credenciales de AWS
-      - name: Configure AWS Credentials
+      - name: Autenticación AWS vía OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }} # Se cargará el del ambiente correcto
+          aws-region: ${{ vars.AWS_REGION }}                 # Se cargará el del ambiente correcto
+          role-session-name: gha-deploy-${{ needs.set-environment.outputs.env_name }}
 
       # Login en Amazon ECR
       - name: Login to Amazon ECR
