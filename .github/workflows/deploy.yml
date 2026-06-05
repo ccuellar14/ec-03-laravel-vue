@@ -14,6 +14,12 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          # 2. OPTIONAL: Asegura que use el token con permisos heredados
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Setup PHP Environment
         uses: shivammathur/setup-php@v2
         with:
