@@ -25,6 +25,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          
+      - name: Verify and Generate composer.lock
+        run: |
+          if [ ! -s composer.lock ]; then
+            echo "⚠️ composer.lock está vacío o no existe. Generando un archivo válido..."
+            composer update --no-install --no-audit --no-progress --ansi
+          else
+            echo "✅ composer.lock válido detectado."
+          fi
 
       # OPTIMIZACIÓN: Caché de Dependencias de Composer
       - name: Cache Composer Dependencies
