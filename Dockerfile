@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json vite.config.js ./
 COPY resources ./resources
 
-RUN npm ci && npm run build
+RUN npm install && npm run build
 
 # Stage 2: install PHP dependencies
 FROM php:8.2-cli AS php-builder
