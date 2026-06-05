@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write      
+
 jobs:
   test-and-validate:
     name: 🧪 Run Tests & Code Quality
@@ -19,7 +22,7 @@ jobs:
         with:
           # 2. OPTIONAL: Asegura que use el token con permisos heredados
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Setup PHP Environment
         uses: shivammathur/setup-php@v2
         with:
