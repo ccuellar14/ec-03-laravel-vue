@@ -81,7 +81,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: forzar archivos criticos de Laravel 11 desde CI [skip ci]"
-          file_pattern: 'composer.json composer.lock package-lock.json tests/TestCase.php phpunit.xml bootstrap/app.php'
+          file_pattern: '.'
 
       - name: Install Node Dependencies
         run: npm ci --quiet
