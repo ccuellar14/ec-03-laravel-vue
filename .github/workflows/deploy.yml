@@ -81,7 +81,7 @@ jobs:
 
       # Ejecución Obligatoria de Pruebas
       - name: Execute Backend Tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit tests/ --colors=always
 
   build-and-deploy:
     name: 🚀 Build Docker & Deploy to AWS
