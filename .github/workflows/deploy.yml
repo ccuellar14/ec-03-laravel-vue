@@ -86,29 +86,6 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci --quiet
 
-      # NUEVO: Asegurar que exista bootstrap/app.php (Vital para Laravel 11)
-      - name: 🛠️ Ensure Laravel 11 bootstrap/app.php exists
-        run: |
-          if [ ! -f bootstrap/app.php ]; then
-            echo "⚠️ bootstrap/app.php no existe. Creando el archivo base oficial de Laravel 11..."
-            mkdir -p bootstrap
-            
-            echo '<?php' > bootstrap/app.php
-            echo 'use Illuminate\Foundation\Application;' >> bootstrap/app.php
-            echo 'use Illuminate\Foundation\Configuration\Exceptions;' >> bootstrap/app.php
-            echo 'use Illuminate\Foundation\Configuration\Middleware;' >> bootstrap/app.php
-            echo 'return Application::configure(basePath: dirname(__DIR__))' >> bootstrap/app.php
-            echo '    ->withRouting(' >> bootstrap/app.php
-            echo '        web: __DIR__ . "/../routes/web.php",' >> bootstrap/app.php
-            echo '        commands: __DIR__ . "/../routes/console.php",' >> bootstrap/app.php
-            echo '        health: "/up",' >> bootstrap/app.php
-            echo '    )' >> bootstrap/app.php
-            echo '    ->withMiddleware(function (Middleware $middleware) {})' >> bootstrap/app.php
-            echo '    ->withExceptions(function (Exceptions $exceptions) {})->create();' >> bootstrap/app.php
-          else
-            echo "✅ bootstrap/app.php detectado perfectamente."
-          fi
-          
       - name: Execute Backend Tests
         run: |
           # 1. Forzar a composer.json a registrar la carpeta de tests en caliente
