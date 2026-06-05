@@ -76,6 +76,16 @@ jobs:
       - name: Install Composer Dependencies
         run: composer install --prefer-dist --no-progress --ansi
 
+      # REVISIÓN: Asegúrate de que el commit guarde este archivo si llegó a faltar
+      - name: Commit & Push generated files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: forzar archivos criticos de Laravel 11 desde CI [skip ci]"
+          file_pattern: 'composer.json composer.lock package-lock.json tests/TestCase.php phpunit.xml bootstrap/app.php'
+
+      - name: Install Node Dependencies
+        run: npm ci --quiet
+
       # NUEVO: Asegurar que exista bootstrap/app.php (Vital para Laravel 11)
       - name: 🛠️ Ensure Laravel 11 bootstrap/app.php exists
         run: |
@@ -98,16 +108,6 @@ jobs:
           else
             echo "✅ bootstrap/app.php detectado perfectamente."
           fi
-
-      # REVISIÓN: Asegúrate de que el commit guarde este archivo si llegó a faltar
-      - name: Commit & Push generated files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: forzar archivos criticos de Laravel 11 desde CI [skip ci]"
-          file_pattern: 'composer.json composer.lock package-lock.json tests/TestCase.php phpunit.xml bootstrap/app.php'
-
-      - name: Install Node Dependencies
-        run: npm ci --quiet
 
       - name: Execute Backend Tests
         run: |
