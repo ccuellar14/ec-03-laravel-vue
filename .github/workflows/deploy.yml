@@ -53,42 +53,6 @@ jobs:
         run: |
           composer dump-autoload
 
-      - name: 🛠️ Create Fail-Safe Testing Files
-        run: |
-          mkdir -p tests/Unit
-          
-          echo "Creando tests/TestCase.php base..."
-          cat << 'EOF' > Tests/TestCase.php
-          <?php
-          namespace Tests;
-          use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-          abstract class TestCase extends BaseTestCase
-          {
-              // Clase base requerida por Laravel
-          }
-          EOF
-
-          echo "Creando phpunit.xml base de Laravel 11..."
-          cat << 'EOF' > phpunit.xml
-          <?xml version="1.0" encoding="UTF-8"?>
-          <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-                   bootstrap="vendor/autoload.php"
-                   colors="true">
-              <testsuites>
-                  <testsuite name="Feature">
-                      <directory>./tests/Feature</directory>
-                  </testsuite>
-              </testsuites>
-              <php>
-                  <env name="APP_ENV" value="testing"/>
-                  <env name="BCRYPT_ROUNDS" value="4"/>
-                  <env name="CACHE_STORE" value="array"/>
-                  <env name="DB_CONNECTION" value="sqlite"/>
-                  <env name="DB_DATABASE" value=":memory:"/>
-              </php>
-          </phpunit>
-          EOF
 
       - name: Verify and Generate package-lock.json
         run: |
