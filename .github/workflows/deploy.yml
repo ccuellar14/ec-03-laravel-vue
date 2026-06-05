@@ -97,8 +97,9 @@ jobs:
 
       - name: Execute Backend Tests
         run: |
-          # 1. Asegurar la existencia de la carpeta bootstrap
-          mkdir -p bootstrap
+          # 1. Asegurar la existencia de la carpeta bootstrap y su caché de paquetes
+          mkdir -p bootstrap/cache
+          chmod -R 777 bootstrap/cache
           
           # 2. Crear un bootstrap/app.php in-situ con la ruta "/" integrada para el test
           echo '<?php' > bootstrap/app.php
