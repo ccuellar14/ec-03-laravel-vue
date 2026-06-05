@@ -167,6 +167,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: 🛠️ Ensure Frontend bootstrap.js exists for Vite
+        run: |
+          mkdir -p resources/js
+          if [ ! -f resources/js/bootstrap.js ]; then
+            echo "⚠️ resources/js/bootstrap.js no existe. Creando configuración base de Axios..."
+            echo "import axios from 'axios';" > resources/js/bootstrap.js
+            echo "window.axios = axios;" >> resources/js/bootstrap.js
+            echo "window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';" >> resources/js/bootstrap.js
+          else
+            echo "✅ resources/js/bootstrap.js detectado perfectamente."
+          fi
+          
       # Compilación (Vue), Empaquetado y Push de la Imagen Docker
       - name: Build, Tag, and Push Docker Image
         env:
