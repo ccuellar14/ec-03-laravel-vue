@@ -49,6 +49,10 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Autoload Composer
+        run: |
+          composer dump-autoload
+
       - name: Verify and Generate package-lock.json
         run: |
           if [ ! -s package-lock.json ]; then
