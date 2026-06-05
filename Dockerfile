@@ -3,7 +3,8 @@ FROM node:20-bullseye AS node-builder
 WORKDIR /app
 
 # Install only package metadata first for better cache
-COPY package.json package-lock.json vite.config.js ./
+COPY package.json package-lock.json ./
+COPY vite.config.js ./
 COPY resources ./resources
 
 RUN npm install && npm run build
