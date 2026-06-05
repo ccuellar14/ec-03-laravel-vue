@@ -6,7 +6,8 @@ on:
       - main
 
 permissions:
-  contents: write      
+  contents: write
+  id-token: write      
 
 jobs:
   test-and-validate:
