@@ -80,7 +80,7 @@ jobs:
 
       # Ejecución Obligatoria de Pruebas
       - name: Execute Backend Tests
-        run: vendor/bin/phpunit
+        run: php artisan test --no-coverage --fail-on-risky
 
   build-and-deploy:
     name: 🚀 Build Docker & Deploy to AWS
