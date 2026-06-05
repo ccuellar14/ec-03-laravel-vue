@@ -108,7 +108,7 @@ jobs:
           else
             echo "✅ bootstrap/app.php detectado perfectamente."
           fi
-
+          
       - name: Execute Backend Tests
         run: |
           # 1. Forzar a composer.json a registrar la carpeta de tests en caliente
